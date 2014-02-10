@@ -4,7 +4,7 @@
 
 ## Installation
 
-`pip install git+https://github.com/rossjones/PyMollom.git@xmlrpc`
+`pip install git+https://github.com/datagovuk/PyMollom.git@xmlrpc`
 
 
 ## Usage
