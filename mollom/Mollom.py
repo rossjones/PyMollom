@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-# 
-# Update 2008-09-09: MollomAPI.getServerList should now check if the 
-#                    list by the server is empty. If that's the case, 
+#
+# Update 2008-09-09: MollomAPI.getServerList should now check if the
+#                    list by the server is empty. If that's the case,
 #                    a hardcoded list of servers should be used.
 
 """ Mollom is a module that allows interacting with the Mollom
@@ -38,7 +38,7 @@ import xmlrpclib as x
 from HTTPTransport import HTTPTransport
 from ConfigParser import ConfigParser
 
-    
+
 class MollomFault(object):
   """MollomFault encapsulates values returned by the Mollom service that indicate a fault."""
 
@@ -58,7 +58,7 @@ class MollomFault(object):
 
 
 
-    
+
 class MollomAPI(object):
   """MollomAPI is a class providing access to the Mollom (http://mollom.com) content filtering
      service.  """
@@ -70,11 +70,11 @@ class MollomAPI(object):
     Keyword arguments:
     publicKey                 -- The public Mollom key for your website.
     privateKey                -- The private Mollom key for your website.
-    cacheCallback  (optional) -- The callback for storing/cacheing the server list. If not provided, the 
+    cacheCallback  (optional) -- The callback for storing/cacheing the server list. If not provided, the
                                  list will be stored in a class variable
     timeoutDays    (optional) -- The Mollom server list timeout in days. Defaults to 7 days.
     timeoutHours   (optional) -- The Mollom server list timeout in hours. Defaults to 0 hours.
-    defaultServer  (optional) -- The default server for communicating with Mollom. This should 
+    defaultServer  (optional) -- The default server for communicating with Mollom. This should
                                  only be used for obtaining a valid server list. Defaults to
                                  http://xmlrpc.mollom.com.
     defaultVersion (optional) -- The default API version used. Defaults to 1.0.
@@ -90,14 +90,14 @@ class MollomAPI(object):
     self.timeoutDays   = timeoutDays
     self.timeoutHours  = timeoutHours
 
-    # maximal number of retries to access the service before bailing 
+    # maximal number of retries to access the service before bailing
     self.__maxDepth = 5
 
-    self.defaultServer = defaultServer 
+    self.defaultServer = defaultServer
     self.currentServer = defaultServer
     self.mollomVersion = defaultVersion
 
-    self.hardCodedServerList = ['http://xmlrpc3.mollom.com', 'http://xmlrpc2.mollom.com', 'http://xmlrpc1.mollom.com']
+    self.hardCodedServerList = ['http://xmlrpc2.mollom.com', 'http://xmlrpc1.mollom.com']
 
   def __s(self):
     r = x.ServerProxy(self.currentServer + '/' + self.mollomVersion, HTTPTransport())
@@ -105,7 +105,7 @@ class MollomAPI(object):
 
   def __authentication(self):
     """Computes the required authentication information for each message sent to the
-    Mollom service. This function should not be used by other methods than the API 
+    Mollom service. This function should not be used by other methods than the API
     methods in the MollomAPI class.
     """
 
@@ -131,7 +131,7 @@ class MollomAPI(object):
     server provided is the one that should preferably be used.
 
     In case of failure, we use a hard coded list of servers, but we only do this
-    once, i.e., upon further requests, we only try to fetch a new list from the 
+    once, i.e., upon further requests, we only try to fetch a new list from the
     server, rather than retrying the hard coded list.
 
     In case a cache callback was defined to store the server list, we use that,
@@ -146,7 +146,7 @@ class MollomAPI(object):
 
     print "DEBUG: _serverListInfo = ", _serverListInfo
 
-    # This is not required by the API document, yet it makes sense to check 
+    # This is not required by the API document, yet it makes sense to check
     # the age of the cached server list, otherwise the chance exists we will
     # have to update anyway.
     if _serverListInfo is not None:
@@ -183,21 +183,21 @@ class MollomAPI(object):
     """Makes the actual call to the Mollom service.
 
     The call is made to the first available server. This method automatically
-    refreshes the server list in case no servers are available, as indicated 
-    by a fault. After 5 refreshes, the method bails, returning None. This 
+    refreshes the server list in case no servers are available, as indicated
+    by a fault. After 5 refreshes, the method bails, returning None. This
     method should only be called by the MollomAPI methods.
 
     Keyword arguments:
     remote_call            -- The name of the Mollom call to make.
     data_                  -- Dictionary containing the arguments for the call.
     depth       (optional) -- The recursive depth in case we need to refresh the
-                              server list. 
-  
+                              server list.
+
     Returns:
       The result of the call, if a server is available.
       None after 5 successive refreshes of the server list.
     """
-    
+
     data = self.__authentication()
     data.update(data_)
 
@@ -205,7 +205,7 @@ class MollomAPI(object):
     if depth > self.__maxDepth:
       return None
 
-    #try the remote call on each of the servers from the obtained list. 
+    #try the remote call on each of the servers from the obtained list.
     for server in self.getServerList():
       try:
         #print "DEBUG: contacting server: %s"%(server)
@@ -258,10 +258,10 @@ class MollomAPI(object):
 
     if sessionID is not None: data['session_id'] = sessionID
     if postTitle is not None: data['post_title'] = postTitle
-    if postBody is not None: data['post_body'] = postBody 
-    if authorName is not None: data['author_name'] = authorName 
+    if postBody is not None: data['post_body'] = postBody
+    if authorName is not None: data['author_name'] = authorName
     if authorURL is not None: data['author_url'] = authorURL
-    if authorMail is not None: data['author_mail'] = authorMail 
+    if authorMail is not None: data['author_mail'] = authorMail
     if authorOpenID is not None: data['author_openid'] = authorOpenID
     if authorIP is not None: data['author_ip'] = authorIP
     if authorID is not None: data['author_id'] = authorID
@@ -278,7 +278,7 @@ class MollomAPI(object):
                  call is made.
     feedback  -- The feedback you wish to provide as a string taking four possible values:
                  'spam', 'profanity', 'low-quality', 'unwanted'. It is important to know
-                 that Mollom will use feedback to update the reputation assigned to 
+                 that Mollom will use feedback to update the reputation assigned to
                  your key-pair.
 
     Returns:
@@ -313,7 +313,7 @@ class MollomAPI(object):
     if authorIP is not None: data['author_ip'] = authorIP
 
     return self.__service('getImageCaptcha', data)
-    
+
 
   def getAudioCaptcha(self, sessionID=None, authorIP=None):
     """Instruct the Mollom service to generate an audio CAPTCHA.
@@ -375,7 +375,7 @@ class MollomAPI(object):
     Returns:
       An integer indicating the requested number
     """
-              
+
 
     data = dict()
 
@@ -405,10 +405,10 @@ class MollomAPI(object):
     Returns:
       Unclear from the API description, but likely an array of structs
       containing a language string (2 or 3 characters) and a confidence
-      value between 0 and 1. The languages are sorted according to 
+      value between 0 and 1. The languages are sorted according to
       descending confidence values.
     """
-    
+
     data = dict()
     data['text'] = text
 
@@ -444,7 +444,7 @@ class MollomAPI(object):
     """
     data = dict()
     data['text'] = text
-    
+
     return __service('removeBlacklistText', data)
 
   def listBlacklistText(self):
@@ -461,7 +461,7 @@ class MollomAPI(object):
   def addBlacklistURL(self, url):
     """Add an URL to the list of blacklisted URLS for the site corresponding to
        the used public/private keypair
-    
+
     Keyword arguments:
     url -- The URL to blacklist
 
@@ -522,7 +522,7 @@ class MollomContentResponse(object):
 class MollomBase(object):
   """MollomBase provides baseline functionality encapsulating Mollom API calls.
 
-  The configuration is put in a config file, which has the following mandatory and 
+  The configuration is put in a config file, which has the following mandatory and
   optional fields:
 
     [general]
@@ -540,7 +540,7 @@ class MollomBase(object):
 
 
   A user should derive the class and provide functionality for the cacheServerList()
-  method, if desired. 
+  method, if desired.
 
   Note: this class is still in early draft stage, so may change frequently.
   """
