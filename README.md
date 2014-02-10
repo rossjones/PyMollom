@@ -1,12 +1,15 @@
-========
-PyMollom
-========
+# PyMollom
 
-A Python library for the `Mollom`_ anti-spam service.
+### This is the XMLRPC branch from [PyMollom](https://github.com/itkovian/PyMollom). Use that if you want the newer API.
 
-A PyPI package is available at `PyPI_pymollom`_.
+## Installation
 
-Example: ::
+`pip install git+https://github.com/rossjones/PyMollom.git@xmlrpc`
+
+
+## Usage
+
+```python
 
   from Mollom import MollomAPI
   from Mollom import MollomFault
@@ -25,6 +28,4 @@ Example: ::
           return True
       return False
 
-
-.. _`Mollom`: http://mollom.com/
-.. _`PyPI_pymollom`: http://pypi.python.org/pypi?:action=display&name=PyMollom&version=0.1
+```
