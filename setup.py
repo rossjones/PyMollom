@@ -11,7 +11,7 @@ setup(name='PyMollom',
       packages=find_packages(exclude=['ez_setup']),
       include_package_data=False,
       description='A Python library for the Mollom anti-spam service',
-      long_description=open('README.rst').read(),
+      long_description=open('README.md').read(),
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Intended Audience :: Developers',
